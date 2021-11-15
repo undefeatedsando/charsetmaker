@@ -21,10 +21,10 @@ export function setColor(hex, imageData, i) {
 
 }
 
-export function getNewColorCollection(size, rules) {
+export function getNewColorCollection(size, rules, params) {
     let collection = [];
     for (let i = 0; i < size; i++) {
-        collection.push(rules(i));
+        collection.push(rules(i, params));
     }
     return collection;
 }
@@ -74,10 +74,11 @@ export function randomColor(i) {
     return '#' + Math.floor(Math.random() * 16777215).toString(16);
 }
 
-export function preDefinedColor(i) {
+export function preDefinedColor(i, params) {
     let collection = [
         ['#0B2027', '#40798C', '#70A9A1', '#CFD7C7'],
-        ['#242038', '#725AC1', '#CAC4CE', '#F7ECE1']
+        ['#242038', '#725AC1', '#CAC4CE', '#F7ECE1'],
+        ['#45062E', '#7F055F', '#E5A4CB', '#FFE8D4']
     ];
-    return collection[window.params.palette_id][i];
+    return collection[params.palette_id][i];
 }

@@ -6,6 +6,7 @@ export default class Sprite {
 
         this.layer_id = Math.floor(Math.random() * 1000);
         this.layer = document.createElement('canvas');
+        this.order = layer_order;
         this.ctx = this.layer.getContext("2d");
         this.ctx.imageSmoothingEnabled = false;
         this.img = new Image();
@@ -23,8 +24,8 @@ export default class Sprite {
         document.body.append(this.layer);
     }
 
-    edit(src, canvas, params) {
-        window.params = params;
+    edit(src, canvas, params = false) {
+        this.palette.setParams(params);
         this.ctx.clearRect(0, 0, Const.TRGT_WIDTH, Const.TRGT_HEIGHT);
         let self = this;
         this.img = new Image();
@@ -62,7 +63,7 @@ export default class Sprite {
     }
 
     _render_to_save(canvas) {
-    	let local_ctx = canvas.getContext("2d");
+        let local_ctx = canvas.getContext("2d");
         local_ctx.drawImage(this.layer, 0, 0);
     }
 

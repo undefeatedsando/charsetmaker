@@ -6,9 +6,15 @@ export default class Palette {
     imageData = false;
     oldPalette = false;
     newPalette = false;
+    params = false;
 
     setBase(ctx, width, height) {
         this.imageData = ctx.getImageData(0, 0, width, height);
+    }
+
+    setParams(params) {
+        if (!!params)
+            this.params = params;
     }
 
     get() {
@@ -16,9 +22,9 @@ export default class Palette {
     }
 
     getNewImage() {
-    	this.getOldPalette();
-    	this.getNewPalette();
-            //console.log(this.newPalette, this.oldPalette);
+        this.getOldPalette();
+        this.getNewPalette();
+        //console.log(this.newPalette, this.oldPalette);
         for (var i = 0; i < this.imageData.data.length / 4; i++) {
             var currentColor = this.getColor(i);
             //bg transparent
@@ -53,13 +59,18 @@ export default class Palette {
             }
         }
 
-        oldPalette.sort((a,b) => a.r < b.r ? -1 : 1);
+        oldPalette.sort((a, b) => a.r < b.r ? -1 : 1);
         this.oldPalette = oldPalette;
         return oldPalette;
     }
 
     getNewPalette() {
-        this.newPalette = Recolor.getNewColorCollection(this.oldPalette.length, Recolor.preDefinedColor)
+        if (!this.params)
+            this.newPalette = this.oldPalette
+        else
+            this.newPalette = Recolor.getNewColorCollection(this.oldPalette.length, Recolor.preDefinedColor, this.params)
+        
+        console.log(this.newPalette);
         return this.newPalette;
     }
 
