@@ -2,7 +2,7 @@ import Palette from './Palette.js';
 import * as Const from './constants.js';
 
 export default class Sprite {
-    constructor(src) {
+    constructor(src, layer_order = 1) {
 
         this.layer_id = Math.floor(Math.random() * 1000);
         this.layer = document.createElement('canvas');
@@ -23,7 +23,8 @@ export default class Sprite {
         document.body.append(this.layer);
     }
 
-    edit(src, canvas) {
+    edit(src, canvas, params) {
+        window.params = params;
         this.ctx.clearRect(0, 0, Const.TRGT_WIDTH, Const.TRGT_HEIGHT);
         let self = this;
         this.img = new Image();

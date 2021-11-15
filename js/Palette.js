@@ -18,7 +18,7 @@ export default class Palette {
     getNewImage() {
     	this.getOldPalette();
     	this.getNewPalette();
-            console.log(this.newPalette, this.oldPalette);
+            //console.log(this.newPalette, this.oldPalette);
         for (var i = 0; i < this.imageData.data.length / 4; i++) {
             var currentColor = this.getColor(i);
             //bg transparent
@@ -52,6 +52,8 @@ export default class Palette {
                 oldPalette.push(currentColor);
             }
         }
+
+        oldPalette.sort((a,b) => a.r < b.r ? -1 : 1);
         this.oldPalette = oldPalette;
         return oldPalette;
     }

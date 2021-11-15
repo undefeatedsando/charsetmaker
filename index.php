@@ -23,6 +23,9 @@
 
 <body>
     <canvas id="kokoko"></canvas>
+    <button id="recolor" onclick="sprite.edit('cat.png', c, {palette_id: 0})">Перекрасить 1</button>
+
+    <button id="recolor" onclick="sprite.edit('cat.png', c, {palette_id: 1})">Перекрасить 2</button>
 </body>
 <script type="module" src="main.js"></script>
 

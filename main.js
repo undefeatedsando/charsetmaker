@@ -7,6 +7,8 @@ setBg(c)
 
 var trngl = new Sprite("trngl.png");
 var sprite = new Sprite("hrt.png");
+var params = {};
+window.params = params;
 
 sprite.normalize(c);
 

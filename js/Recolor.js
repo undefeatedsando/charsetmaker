@@ -75,6 +75,9 @@ export function randomColor(i) {
 }
 
 export function preDefinedColor(i) {
-	let collection = ['#7fac72', '#d0ddaf', '#ac650d', '#8539ab'];
-	return collection[i];
+    let collection = [
+        ['#0B2027', '#40798C', '#70A9A1', '#CFD7C7'],
+        ['#242038', '#725AC1', '#CAC4CE', '#F7ECE1']
+    ];
+    return collection[window.params.palette_id][i];
 }
