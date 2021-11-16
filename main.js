@@ -25,7 +25,6 @@ sprites[0].normalize(c);
 
 var scene = new SceneManager(c, sprites/*[trngl, sprite]*/);
 scene.render();
-Recolor.initPaletteFromSource();
 window.c = c;
 //window.sprite = sprite;
 window.scene = scene;

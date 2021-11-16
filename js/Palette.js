@@ -24,7 +24,7 @@ export default class Palette {
     getNewImage() {
         this.getOldPalette();
         this.getNewPalette();
-        console.log(this.newPalette, this.oldPalette);
+        
         if(!this.params){
             return this.imageData;
         }

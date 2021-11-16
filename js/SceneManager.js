@@ -1,4 +1,6 @@
 import * as Recolor from './Recolor.js';
+import * as Const from './constants.js';
+import Controls from './Controls.js';
 
 export default class SceneManager {
 	//sprites = [];
@@ -8,6 +10,12 @@ export default class SceneManager {
 		this.ctx = canvas.getContext("2d");
 		this.sprites = sprites_arr;
 		this.sprites.sort((a, b) => a.order > b.order ? 1: -1);
+		Recolor.initPaletteFromSource();
+		self = this;
+		window.setTimeout(function() { 
+			self.palette = Recolor.paletteFromSource();
+			self.controls = new Controls(self);
+		}, Const.DELAY);
 		//console.log(this.sprites);
 	}
 
