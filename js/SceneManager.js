@@ -1,3 +1,5 @@
+import * as Recolor from './Recolor.js';
+
 export default class SceneManager {
 	//sprites = [];
 
@@ -6,7 +8,7 @@ export default class SceneManager {
 		this.ctx = canvas.getContext("2d");
 		this.sprites = sprites_arr;
 		this.sprites.sort((a, b) => a.order > b.order ? 1: -1);
-		console.log(this.sprites);
+		//console.log(this.sprites);
 	}
 
 	render(){
@@ -16,12 +18,23 @@ export default class SceneManager {
 	recolor(sprite_name, param){
 		//console.log(this.sprites);
 		let index = this.sprites.findIndex(item => item.img.src.indexOf(sprite_name) > -1);
-		console.log(index);
 		this.sprites.forEach((sprite, i) => {
 			if(i !== index){
 				sprite.edit(sprite.img.src, this.canvas);
 			} else {
 				sprite.edit(sprite.img.src, this.canvas, param);
+			}
+		})
+	}
+
+	replace(sprite_old, sprite_new){
+		//console.log(this.sprites);
+		let index = this.sprites.findIndex(item => item.img.src.indexOf(sprite_old) > -1);
+		this.sprites.forEach((sprite, i) => {
+			if(i == index){
+				sprite.edit('img/' + sprite_new + '.png', this.canvas);
+			} else {
+				sprite.edit(sprite.img.src, this.canvas);
 			}
 		})
 	}

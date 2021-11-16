@@ -18,13 +18,16 @@ export default class Palette {
     }
 
     get() {
-        return { imageData: this.imageData };
+        return { imageData: this.imageData, params: this.params };
     }
 
     getNewImage() {
         this.getOldPalette();
         this.getNewPalette();
-        //console.log(this.newPalette, this.oldPalette);
+        console.log(this.newPalette, this.oldPalette);
+        if(!this.params){
+            return this.imageData;
+        }
         for (var i = 0; i < this.imageData.data.length / 4; i++) {
             var currentColor = this.getColor(i);
             //bg transparent
@@ -70,7 +73,7 @@ export default class Palette {
         else
             this.newPalette = Recolor.getNewColorCollection(this.oldPalette.length, Recolor.preDefinedColor, this.params)
         
-        console.log(this.newPalette);
+        //console.log(this.newPalette);
         return this.newPalette;
     }
 
@@ -96,4 +99,5 @@ export default class Palette {
     notBg(i) {
         return this.imageData.data[i * 4 + 3] > 200;
     }
+
 }

@@ -6,6 +6,9 @@ export default class Sprite {
 
         this.layer_id = Math.floor(Math.random() * 1000);
         this.layer = document.createElement('canvas');
+        this.layer.height = Const.TRGT_HEIGHT;
+        this.layer.width = Const.TRGT_WIDTH;
+        this.layer
         this.order = layer_order;
         this.ctx = this.layer.getContext("2d");
         this.ctx.imageSmoothingEnabled = false;
@@ -21,18 +24,20 @@ export default class Sprite {
         this.img.addEventListener("load", function() {
             drawScaled(layer, ctx, img);
         })
-        document.body.append(this.layer);
+        document.getElementById('canvases').append(this.layer);
     }
 
     edit(src, canvas, params = false) {
         this.palette.setParams(params);
+        //console.log(this.order, params);
         this.ctx.clearRect(0, 0, Const.TRGT_WIDTH, Const.TRGT_HEIGHT);
         let self = this;
         this.img = new Image();
         this.img.src = src;
+        console.log(src);
         self = this;
         this.img.addEventListener("load", function() {
-            self.drawScaled(self.layer, self.ctx, self.img)
+            self.drawScaled(self.layer, self.ctx, self.img);
             self.palette.setBase(self.ctx, self.img.naturalWidth * Const.SCALE, self.img.naturalHeight * Const.SCALE);
 
             window.setTimeout(function() {
