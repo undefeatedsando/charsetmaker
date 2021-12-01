@@ -1,6 +1,7 @@
 import * as Recolor from './Recolor.js';
 import * as Const from './constants.js';
 import Controls from './Controls.js';
+import Resources from '../config/resources_json.js'
 
 export default class SceneManager {
 	//sprites = [];
@@ -40,7 +41,7 @@ export default class SceneManager {
 		let index = this.sprites.findIndex(item => item.img.src.indexOf(sprite_old) > -1);
 		this.sprites.forEach((sprite, i) => {
 			if(i == index){
-				sprite.edit('img/' + sprite_new + '.png', this.canvas);
+				sprite.edit(sprite_new, this.canvas);
 			} else {
 				sprite.edit(sprite.img.src, this.canvas);
 			}
