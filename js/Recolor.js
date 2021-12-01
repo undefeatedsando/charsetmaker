@@ -1,5 +1,8 @@
 //Palette helpers
 
+
+///// IMAGEDATA MANIPULATION /////
+
 export function updateColors(imageData, oldImageColors, newImageColors) {
     for (var i = 0; i < imageData.data.length / 4; i++) {
         var currentColor = getColor(i, imageData);
@@ -36,27 +39,10 @@ export function getNewColorCollection(size, rules, params) {
     return collection;
 }
 
-export function sameColor(rgb1, rgb2, fault = 10) {
-    let sameRed, sameGreen, sameBlue;
+///// IMAGEDATA MANIPULATION END /////
 
-    sameRed = (rgb1.r + fault > rgb2.r) && (rgb1.r - fault < rgb2.r);
-    sameGreen = (rgb1.g + fault > rgb2.g) && (rgb1.g - fault < rgb2.g);
-    sameBlue = (rgb1.b + fault > rgb2.b) && (rgb1.b - fault < rgb2.b);
 
-    return sameRed && sameGreen && sameBlue;//) || (sameGreen && sameBlue);
-
-}
-
-export function strictSameColor(rgb1, rgb2, fault = 20) {
-    let sameRed, sameGreen, sameBlue;
-
-    sameRed = rgb1.r = rgb2.r;
-    sameGreen = rgb1.g = rgb2.g;
-    sameBlue = rgb1.b = rgb2.b;
-
-    return sameRed && sameGreen && sameBlue;
-
-}
+///// COLORS TRANSFORM , COMPARISON, GENERATION /////
 
 export function hexToRgb(hex) {
     let result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
@@ -76,19 +62,40 @@ export function componentToHex(c) {
     return hex.length == 1 ? "0" + hex : hex;
 }
 
-
 export function randomColor(i) {
     return '#' + Math.floor(Math.random() * 16777215).toString(16);
 }
 
+export function sameColor(rgb1, rgb2, fault = 10) {
+    let sameRed, sameGreen, sameBlue;
+
+    sameRed = (rgb1.r + fault > rgb2.r) && (rgb1.r - fault < rgb2.r);
+    sameGreen = (rgb1.g + fault > rgb2.g) && (rgb1.g - fault < rgb2.g);
+    sameBlue = (rgb1.b + fault > rgb2.b) && (rgb1.b - fault < rgb2.b);
+
+    return sameRed && sameGreen && sameBlue; //) || (sameGreen && sameBlue);
+
+}
+
+//NOT USED
+export function strictSameColor(rgb1, rgb2, fault = 20) {
+    let sameRed, sameGreen, sameBlue;
+
+    sameRed = rgb1.r = rgb2.r;
+    sameGreen = rgb1.g = rgb2.g;
+    sameBlue = rgb1.b = rgb2.b;
+
+    return sameRed && sameGreen && sameBlue;
+
+}
+
+///// COLORS TRANSFORM  END /////
+
+
+//// PALETTE FROM IMAGE /////
+
 export function preDefinedColor(i, params) {
     let collection = paletteFromSource();
-    /*[
-            ['#0B2027', '#0B2027', '#40798C', '#40798C', '#70A9A1', '#CFD7C7'],
-            ['#242038', '#242038', '#725AC1', '#725AC1', '#CAC4CE', '#F7ECE1'],
-            ['#45062E', '#45062E', '#7F055F', '#7F055F', '#E5A4CB', '#FFE8D4']
-        ]*/
-    ;
     return collection[params.palette_id][i];
 }
 
@@ -97,6 +104,7 @@ export function paletteFromSource() {
     let ctx = canvas.getContext("2d");
     let w = canvas.width;
     let h = canvas.height;
+    console.log(w, h);
     let imageData = ctx.getImageData(0, 0, w, h).data;
     let palette = [];
     let collection = [];
@@ -125,9 +133,11 @@ export function initPaletteFromSource() {
     let img = new Image();
     img.src = 'img/palette.png';
     ctx.imageSmoothingEnabled = false;
-    img.addEventListener("load", function() {
-        canvas.height = img.naturalHeight;
-        canvas.width = img.naturalWidth;
-        ctx.drawImage(img, 0, 0);
-    })
+
+        img.addEventListener("load", function() {
+            canvas.height = img.naturalHeight;
+            canvas.width = img.naturalWidth;
+            ctx.drawImage(img, 0, 0);
+            document.dispatchEvent(new Event("palette")); 
+        })
 }

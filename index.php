@@ -13,6 +13,7 @@
         <div id="canvases">
             <canvas id="kokoko"></canvas>
             <canvas id="palette"></canvas>
+            <div id="color"></div>
         </div>
         <div id="controls">
 <!--             <button id="test_button" onclick="scene.replace('dress/1', 'dress/2')">Заменить платье</button> -->

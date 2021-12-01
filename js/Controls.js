@@ -20,7 +20,7 @@ export default class Controls {
                 self.changeActiveClass('.color_control', this);
                 self.colorChange(self.active_resource, i);
             })
-            document.getElementById('controls').append(set_link);
+            document.getElementById('color').append(set_link);
         });
     }
 
@@ -35,6 +35,7 @@ export default class Controls {
 
             resource_folder.resources.forEach((resource) => {
                 let set_resource = document.createElement('canvas');
+                set_resource.setAttribute('data-source', resource_folder.base_folder);
                 set_resource.height = resource_folder.canvas_size;//Const.TRGT_HEIGHT / 4 - 15;
                 set_resource.width = Const.TRGT_WIDTH / 4;
                 let img = new Image();

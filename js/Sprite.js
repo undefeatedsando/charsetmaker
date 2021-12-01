@@ -8,39 +8,37 @@ export default class Sprite {
         this.layer = document.createElement('canvas');
         this.layer.height = Const.TRGT_HEIGHT;
         this.layer.width = Const.TRGT_WIDTH;
-        this.layer
+        this.layer.setAttribute('data-source', src);
         this.order = layer_order;
         this.ctx = this.layer.getContext("2d");
-        this.ctx.imageSmoothingEnabled = false; 
-                this.src = src;       
+        this.ctx.imageSmoothingEnabled = false;
+        this.src = src;
         this.img = new Image();
         this.img.src = src;
         this.palette = new Palette();
 
-        /*        let id = this.layer_id;
-                let layer = this.layer;
-                let ctx = this.ctx;
-                let img = this.img;
-                let palette = this.palette;
-                let drawScaled = this.drawScaled;*/
         let current_self = this;
         this.img.addEventListener("load", function() {
-            //console.log(current_self);
             current_self.drawScaled(current_self);
         })
         document.getElementById('canvases').append(this.layer);
     }
 
     edit(src, canvas, params = false) {
+
+        //palette id
         this.palette.setParams(params);
-        //console.log(this.order, params);
+
+        //prepare img
         this.ctx.clearRect(0, 0, Const.TRGT_WIDTH, Const.TRGT_HEIGHT);
         let self = this;
         this.img = new Image();
         this.img.src = src;
-        //console.log(src);
-        self = this;
+
+        //wait till load
         this.img.addEventListener("load", function() {
+            console.log(src);
+            //draw stuff on layer
             self.drawScaled(self);
             self.palette.setBase(self.ctx, self.img.naturalWidth * Const.SCALE, self.img.naturalHeight * Const.SCALE);
 
@@ -54,14 +52,6 @@ export default class Sprite {
         }, false);
     }
 
-    noBg() {
-
-        /*
-        window.setTimeout(function() {
-            let newImage = self.palette.getNoBgImage();
-            self.ctx.putImageData(newImage, 0, 0);
-        }, Const.DELAY / 2);*/
-    }
 
     clear() {
         this.ctx.clearRect(0, 0, Const.TRGT_WIDTH, Const.TRGT_HEIGHT);
@@ -81,7 +71,7 @@ export default class Sprite {
     }
 
     _render_to_save(canvas) {
-        console.log(this.src);
+        //console.log(this.src);
         let local_ctx = canvas.getContext("2d");
         local_ctx.drawImage(this.layer, 0, 0);
     }
@@ -108,17 +98,4 @@ export default class Sprite {
         //current_self.ctx.drawImage(current_self.img, 0, 0, current_self.img.naturalWidth * Const.SCALE, current_self.img.naturalHeight * Const.SCALE);
     }
 
-    setSelfBg(color = "transparent") {
-        this.ctx.fillStyle = color;
-        this.ctx.fillRect(0, 0, Const.TRGT_WIDTH, Const.TRGT_HEIGHT);
-    }
-
-    setBg(ctx) {
-        ctx.fillStyle = 'yellow';
-        ctx.fillRect(0, 0, Const.TRGT_WIDTH, Const.TRGT_HEIGHT)
-    }
-
-    test() {
-        alert(1);
-    }
 }

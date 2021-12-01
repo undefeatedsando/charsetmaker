@@ -3,7 +3,8 @@ body {
 }
 
 canvas {
-    xdisplay: none;
+    display: none;
+    xborder: 1px solid white;
 }
 
 #kokoko {
@@ -19,6 +20,16 @@ canvas {
 #controls canvas {
     display: inline-block;
 }
+
+#controls .preview_container canvas {
+    display: inline-block;
+}
+/*#controls .preview_container canvas:nth-child(1),
+#controls .preview_container canvas:nth-child(2),
+#controls .preview_container canvas:nth-child(3),
+#controls .preview_container canvas:nth-child(4) {
+    display: inline-block;
+}*/
 
 .color_control {
     display: inline-block;
@@ -40,4 +51,7 @@ canvas {
 
 .color_control.active, .preview_container canvas.active{
     border: 1px solid white;
+}
+.preview_container{
+    xwidth: 200px;
 }
