@@ -12,6 +12,13 @@ export function updateColors(imageData, oldImageColors, newImageColors) {
 }
 
 export function setColor(hex, imageData, i) {
+    if (hex == 'transparent') {
+        imageData.data[i * 4] = 0;
+        imageData.data[i * 4 + 1] = 0;
+        imageData.data[i * 4 + 2] = 0;
+        imageData.data[i * 4 + 3] = 0;
+        return;
+    }
     var rgb = hexToRgb(hex);
     if (!rgb)
         rgb = hexToRgb('#000000');
@@ -29,14 +36,14 @@ export function getNewColorCollection(size, rules, params) {
     return collection;
 }
 
-export function sameColor(rgb1, rgb2, fault = 20) {
+export function sameColor(rgb1, rgb2, fault = 10) {
     let sameRed, sameGreen, sameBlue;
 
     sameRed = (rgb1.r + fault > rgb2.r) && (rgb1.r - fault < rgb2.r);
     sameGreen = (rgb1.g + fault > rgb2.g) && (rgb1.g - fault < rgb2.g);
     sameBlue = (rgb1.b + fault > rgb2.b) && (rgb1.b - fault < rgb2.b);
 
-    return sameRed && sameGreen && sameBlue;
+    return sameRed && sameGreen && sameBlue;//) || (sameGreen && sameBlue);
 
 }
 

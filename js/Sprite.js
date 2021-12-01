@@ -34,7 +34,7 @@ export default class Sprite {
         let self = this;
         this.img = new Image();
         this.img.src = src;
-        console.log(src);
+        //console.log(src);
         self = this;
         this.img.addEventListener("load", function() {
             self.drawScaled(self.layer, self.ctx, self.img);

@@ -24,8 +24,9 @@ export default class Palette {
     getNewImage() {
         this.getOldPalette();
         this.getNewPalette();
-        
-        if(!this.params){
+
+            console.log(this.oldPalette.length,this.newPalette.length);
+        if (!this.params) {
             return this.imageData;
         }
         for (var i = 0; i < this.imageData.data.length / 4; i++) {
@@ -34,11 +35,24 @@ export default class Palette {
             if (currentColor.a == 0) {
                 continue;
             }
-            //bg white
-            if (currentColor.r + currentColor.g + currentColor.b == 255 * 3) {
+
+            if (Recolor.rgbToHex(currentColor) == '#2b8585') {
+                
+                Recolor.setColor('transparent', this.imageData, i);
                 continue;
             }
-            //console.log(currentColor, this.oldPalette);
+            //remove skin
+            if (Recolor.sameColor(currentColor, Recolor.hexToRgb('#ebbf96'), 30)){// || Recolor.rgbToHex(currentColor) == '#ffebc7') {
+                
+                Recolor.setColor(currentColor, this.imageData, i);
+                continue;
+            }
+
+            //bg white
+            /*            if (currentColor.r + currentColor.g + currentColor.b == 255 * 3) {
+                            continue;
+                        }*/
+            //console.log(this.oldPalette.length);
             var newColorIndex = this.oldPalette.findIndex(item => Recolor.sameColor(currentColor, item));
             Recolor.setColor(this.newPalette[newColorIndex], this.imageData, i);
         }
@@ -54,16 +68,20 @@ export default class Palette {
                 continue;
             }
             //bg white
-            if (currentColor.r + currentColor.g + currentColor.b == 255 * 3) {
+/*            if (currentColor.r + currentColor.g + currentColor.b == 255 * 3) {
                 continue;
-            }
+            }*/
+/*            if (Recolor.rgbToHex(currentColor) == '#2b8585') {
+                continue;
+            }*/
             if (this.notInPalette(oldPalette, currentColor) && !!this.notBg(i)) {
                 oldPalette.push(currentColor);
             }
         }
 
-        oldPalette.sort((a, b) => a.r < b.r ? -1 : 1);
+        oldPalette.sort((a, b) => (a.r + a.g + a.b) < (b.r + b.g + b.b) ? -1 : 1);
         this.oldPalette = oldPalette;
+        //console.log(oldPalette);
         return oldPalette;
     }
 
@@ -72,7 +90,7 @@ export default class Palette {
             this.newPalette = this.oldPalette
         else
             this.newPalette = Recolor.getNewColorCollection(this.oldPalette.length, Recolor.preDefinedColor, this.params)
-        
+
         //console.log(this.newPalette);
         return this.newPalette;
     }

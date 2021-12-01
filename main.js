@@ -10,9 +10,11 @@ setBg(c)
 //var sprite = new Sprite("cat.png", 1);
 
 var sprites = [
-new Sprite("img/fbase.png", 1),
+new Sprite("img/Base/fbase.png", 0),
+
+new Sprite("img/Body/1.png", 1),
 new Sprite("img/hair/1.png", 3),
-new Sprite("img/dress/1.png", 2),
+//new Sprite("img/dress/1.png", 2),
 //new Sprite("img/palette.png", 2),
 ];
 var params = {};
