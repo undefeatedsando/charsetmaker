@@ -62,6 +62,15 @@ export function componentToHex(c) {
     return hex.length == 1 ? "0" + hex : hex;
 }
 
+export function customHexColor(i, params) {
+    let collection = [
+        ['#0B2027', '#0B2027', '#40798C', '#40798C', '#70A9A1', '#CFD7C7'],
+        ['#242038', '#242038', '#725AC1', '#725AC1', '#CAC4CE', '#F7ECE1'],
+        ['#45062E', '#45062E', '#7F055F', '#7F055F', '#E5A4CB', '#FFE8D4']
+    ]
+    return collection[params.palette_id][i];
+}
+
 export function randomColor(i) {
     return '#' + Math.floor(Math.random() * 16777215).toString(16);
 }
@@ -104,7 +113,7 @@ export function paletteFromSource() {
     let ctx = canvas.getContext("2d");
     let w = canvas.width;
     let h = canvas.height;
-    console.log(w, h);
+    //console.log(w, h);
     let imageData = ctx.getImageData(0, 0, w, h).data;
     let palette = [];
     let collection = [];
@@ -131,13 +140,13 @@ export function initPaletteFromSource() {
     let canvas = document.getElementById('palette');
     let ctx = canvas.getContext("2d");
     let img = new Image();
-    img.src = 'img/palette.png';
+    img.src = 'img/palette2.png';
     ctx.imageSmoothingEnabled = false;
 
-        img.addEventListener("load", function() {
-            canvas.height = img.naturalHeight;
-            canvas.width = img.naturalWidth;
-            ctx.drawImage(img, 0, 0);
-            document.dispatchEvent(new Event("palette")); 
-        })
+    img.addEventListener("load", function() {
+        canvas.height = img.naturalHeight;
+        canvas.width = img.naturalWidth;
+        ctx.drawImage(img, 0, 0);
+        document.dispatchEvent(new Event("palette"));
+    })
 }

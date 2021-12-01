@@ -5,6 +5,10 @@ export default class Sprite {
     constructor(src, layer_order = 1) {
 
         this.layer_id = Math.floor(Math.random() * 1000);
+
+        let path = src.split('/');
+        this.folder = path[1];
+        
         this.layer = document.createElement('canvas');
         this.layer.height = Const.TRGT_HEIGHT;
         this.layer.width = Const.TRGT_WIDTH;
@@ -37,7 +41,7 @@ export default class Sprite {
 
         //wait till load
         this.img.addEventListener("load", function() {
-            console.log(src);
+            //console.log(src);
             //draw stuff on layer
             self.drawScaled(self);
             self.palette.setBase(self.ctx, self.img.naturalWidth * Const.SCALE, self.img.naturalHeight * Const.SCALE);

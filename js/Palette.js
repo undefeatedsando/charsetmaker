@@ -10,8 +10,6 @@ export default class Palette {
 
     setBase(ctx, width, height) {
         this.imageData = ctx.getImageData(0, 0, width, height);
-
-        //console.log(this.imageData)
     }
 
     setParams(params) {
@@ -37,13 +35,15 @@ export default class Palette {
     }
 
     getNewImage() {
-        this.getOldPalette();
-        this.getNewPalette();
 
-        //console.log(this.oldPalette.length, this.newPalette.length);
+        //build palettes
+        this.getOldPalette();
+        this.getNewPalette();        
         if (!this.params) {
             return this.imageData;
         }
+
+        //replace colors
         for (var i = 0; i < this.imageData.data.length / 4; i++) {
             var currentColor = this.getColor(i);
             //bg transparent
@@ -52,10 +52,10 @@ export default class Palette {
             }
 
             if (Recolor.rgbToHex(currentColor) == '#2b8585') {
-
                 Recolor.setColor('transparent', this.imageData, i);
                 continue;
             }
+
             //remove skin
             if (Recolor.sameColor(currentColor, Recolor.hexToRgb('#ebbf96'), 30)) { // || Recolor.rgbToHex(currentColor) == '#ffebc7') {
 
@@ -104,7 +104,10 @@ export default class Palette {
         if (!this.params)
             this.newPalette = this.oldPalette
         else
-            this.newPalette = Recolor.getNewColorCollection(this.oldPalette.length, Recolor.preDefinedColor, this.params)
+            this.newPalette = Recolor.getNewColorCollection(
+                this.oldPalette.length, 
+                Recolor.preDefinedColor, 
+                this.params)
 
         //console.log(this.newPalette);
         return this.newPalette;

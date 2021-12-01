@@ -31,6 +31,15 @@ canvas {
     display: inline-block;
 }*/
 
+#controls .preview_container{
+    xdisplay: none;
+}
+
+#controls .preview_container:nth-child(13),
+#controls .preview_container:nth-child(14){
+    display: block;
+}
+
 .color_control {
     display: inline-block;
     width: 20px;
