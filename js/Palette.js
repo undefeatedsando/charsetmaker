@@ -10,6 +10,8 @@ export default class Palette {
 
     setBase(ctx, width, height) {
         this.imageData = ctx.getImageData(0, 0, width, height);
+
+        //console.log(this.imageData)
     }
 
     setParams(params) {
@@ -21,11 +23,24 @@ export default class Palette {
         return { imageData: this.imageData, params: this.params };
     }
 
+    getNoBgImage(ctx, width, height) {
+        this.imageData = ctx.getImageData(0, 0, width, height);
+        for (var i = 0; i < this.imageData.data.length / 4; i++) {
+            var currentColor = this.getColor(i);
+            //bg
+            if (Recolor.rgbToHex(currentColor) == '#2b8585') {
+                Recolor.setColor('transparent', this.imageData, i);
+            }
+        }
+        //console.log(this.imageData)
+        return this.imageData;
+    }
+
     getNewImage() {
         this.getOldPalette();
         this.getNewPalette();
 
-            console.log(this.oldPalette.length,this.newPalette.length);
+        //console.log(this.oldPalette.length, this.newPalette.length);
         if (!this.params) {
             return this.imageData;
         }
@@ -37,13 +52,13 @@ export default class Palette {
             }
 
             if (Recolor.rgbToHex(currentColor) == '#2b8585') {
-                
+
                 Recolor.setColor('transparent', this.imageData, i);
                 continue;
             }
             //remove skin
-            if (Recolor.sameColor(currentColor, Recolor.hexToRgb('#ebbf96'), 30)){// || Recolor.rgbToHex(currentColor) == '#ffebc7') {
-                
+            if (Recolor.sameColor(currentColor, Recolor.hexToRgb('#ebbf96'), 30)) { // || Recolor.rgbToHex(currentColor) == '#ffebc7') {
+
                 Recolor.setColor(currentColor, this.imageData, i);
                 continue;
             }
@@ -68,12 +83,12 @@ export default class Palette {
                 continue;
             }
             //bg white
-/*            if (currentColor.r + currentColor.g + currentColor.b == 255 * 3) {
-                continue;
-            }*/
-/*            if (Recolor.rgbToHex(currentColor) == '#2b8585') {
-                continue;
-            }*/
+            /*            if (currentColor.r + currentColor.g + currentColor.b == 255 * 3) {
+                            continue;
+                        }*/
+            /*            if (Recolor.rgbToHex(currentColor) == '#2b8585') {
+                            continue;
+                        }*/
             if (this.notInPalette(oldPalette, currentColor) && !!this.notBg(i)) {
                 oldPalette.push(currentColor);
             }

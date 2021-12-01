@@ -3,7 +3,7 @@ body {
 }
 
 canvas {
-    display: none;
+    xdisplay: none;
 }
 
 #kokoko {

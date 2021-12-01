@@ -12,8 +12,17 @@ setBg(c)
 var sprites = [
 new Sprite("img/Base/fbase.png", 0),
 
-new Sprite("img/Body/1.png", 1),
-new Sprite("img/hair/1.png", 3),
+new Sprite("img/Body/fbody (21).png", 5),
+new Sprite("img/hair/fhair (16).png", 3),
+//new Sprite("img/Etc/fetc (1).png", 3),
+//new Sprite("img/Foot/ffoot (2).png", 3),
+//new Sprite("img/Hand/fhand (1).png", 3),
+new Sprite("img/Head/fhead (1).png", 4),
+new Sprite("img/InnerBottom/finnerbottom (1).png", 4),
+//new Sprite("img/InnerTop/cinnerbottom (1).png", 4),
+
+
+
 //new Sprite("img/dress/1.png", 2),
 //new Sprite("img/palette.png", 2),
 ];
