@@ -140,7 +140,7 @@ export function initPaletteFromSource() {
     let canvas = document.getElementById('palette');
     let ctx = canvas.getContext("2d");
     let img = new Image();
-    img.src = 'img/palette2.png';
+    img.src = 'img/palette.png';
     ctx.imageSmoothingEnabled = false;
 
     img.addEventListener("load", function() {

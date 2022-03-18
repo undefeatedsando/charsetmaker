@@ -4,30 +4,29 @@ import Controls from './Controls.js';
 import Sprite from './Sprite.js';
 import Resources from '../config/resources_json.js'
 import Linked from '../config/linked_folders.js'
+import Decorated from '../config/decorated_elements.js'
 
 export default class SceneManager {
-    //sprites = [];
 
-    constructor(canvas /*, sprites_arr*/ ) {
-        Recolor.initPaletteFromSource();
+    constructor(canvas) {
+
+        //build all available sprites
         this.canvas = canvas;
         this.ctx = canvas.getContext("2d");
-        /*        this.sprites = sprites_arr;
-                this.sprites.sort((a, b) => a.order > b.order ? 1 : -1);*/
         self = this;
         self.sprites = [];
         Resources.layers.forEach((resource_folder, i) => {
             self.sprites.push(new Sprite(resource_folder.base_folder + resource_folder.resources[0], i));
         })
-        //console.log(self.sprites);
         self.sprites.sort((a, b) => a.order > b.order ? 1 : -1);
 
+        //init controls
+        Recolor.initPaletteFromSource();
         document.addEventListener("palette", function() {
             self.palette = Recolor.paletteFromSource();
             self.controls = new Controls(self);
         })
 
-        //console.log(this.sprites);
     }
 
     normalize() {
@@ -41,54 +40,59 @@ export default class SceneManager {
     }
 
     recolor(sprite_name, param) {
-        //console.log(this.sprites);
-        //console.log(sprite_name, this.sprites, Linked);
+
         let index = this.sprites.findIndex(item => item.img.src.indexOf(sprite_name) > -1);
 
         let linked = [this.sprites[index].folder];
 
+        //get connected folder
         Linked.forEach((arr) => {
             if(arr.indexOf(this.sprites[index].folder) > -1)
                 linked = arr;
         })
 
-        console.log(linked);
         this.sprites.forEach((sprite, i) => {
-            //console.log(sprite.src, i);
-            if (linked.indexOf(sprite.folder) > -1) { // (i == index || i == 15) {
-                //this.linked(sprite, sprite.src, param);
+            if (linked.indexOf(sprite.folder) > -1) {
+                //recolor chosen
                 sprite.edit(sprite.img.src, this.canvas, param);
-                //this.linked_recolor(sprite, sprite.img.src, param);
-                //console.log(sprite.img.src, this.canvas, param)
             } else {
+                //leave as is
                 sprite.edit(sprite.img.src, this.canvas);
             }
         })
+
     }
 
     replace(sprite_old, sprite_new) {
+
         this.ctx.clearRect(0, 0, Const.TRGT_WIDTH, Const.TRGT_HEIGHT);
+
+        //get layer index
         let index = this.sprites.findIndex(item => item.img.src.indexOf(sprite_old) > -1);
+        
         this.sprites.forEach((sprite, i) => {
             if (i == index) {
-                //sprite.edit(sprite_new, this.canvas);
+                //redraw edited layer
                 this.linked_replace(sprite, sprite_new);
             } else {
+                //draw others
                 sprite.edit(sprite.img.src, this.canvas);
             }
-            //console.log('Sprite' + i, sprite);
         })
+
     }
 
     linked_replace(sprite, sprite_new) {
-        //console.log(sprite_new, this.canvas, param)
+
         //for basic sprites
         sprite.edit(sprite_new, this.canvas);
-        //return;
-        //each linked folders from config
-        Linked.forEach((arr) => {
+
+        //each linked and decotrated from config
+        let all_linked = Linked.concat(Decorated);
+        all_linked.forEach((arr) => {
             let folders = sprite_new.split('/');
             //if link exists
+        console.log(arr, folders);
             if (arr.indexOf(folders[1]) != -1) {
                 //each element
                 arr.forEach((str) => {

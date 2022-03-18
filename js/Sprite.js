@@ -28,6 +28,7 @@ export default class Sprite {
         document.getElementById('canvases').append(this.layer);
     }
 
+    // change image on layer
     edit(src, canvas, params = false) {
 
         //palette id

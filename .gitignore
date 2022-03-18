@@ -1,3 +1,4 @@
-test_img
-img
-!img/palette.png
+img/*
+.idea/*
+config/*
+test_img/*
