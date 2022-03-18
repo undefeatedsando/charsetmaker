@@ -10,6 +10,7 @@ export default class Controls {
         this.ctxs = [];
         this.initColorControls();
         this.initResourceControls();
+        this.linked = this.listOfLinked();
     }
 
     initColorControls() {
@@ -33,6 +34,8 @@ export default class Controls {
         let height = Const.TRGT_HEIGHT / 4;
         let controls = this;
 
+        this.multiLayerControl();
+
         Resources.layers.forEach((resource_folder, i) => {
 
             //create containers for previews
@@ -41,15 +44,14 @@ export default class Controls {
             let container_id = 'preview_container_' + i;
             container.id = container_id;
 
-            //
-            let need_save_ctx = this.hasLinked(resource_folder.name);
-
             document.getElementById('previews').append(container);
 
             //create canvas
             resource_folder.resources.forEach((resource) => {
                 let set_resource = document.createElement('canvas');
+                let data_image = resource_folder.name + '/' + resource;
                 set_resource.setAttribute('data-source', resource_folder.base_folder);
+                set_resource.setAttribute('data-image', data_image);
                 set_resource.height = resource_folder.canvas_size;//Const.TRGT_HEIGHT / 4 - 15;
                 set_resource.width = width;
 
@@ -59,24 +61,14 @@ export default class Controls {
                 let src = resource_folder.base_folder + resource;
                 ctx.name = resource;
 
-                if(need_save_ctx){
-                    controls.ctxs.push({ctx: ctx, canvas: set_resource});
-                }
-
                 img.src = src;
                 let self = this;
                 img.addEventListener("load", function() {
                     ctx.drawImage(img, 0, resource_folder.canvas_offset, width, height, 0, 0, img.naturalWidth / 4, img.naturalHeight / 4);
-
-
-//////
-/*                    let helper_palette = new Palette();
-                    let transparent_data = helper_palette.getNoBgImage(ctx, width, height);
-
-                    ctx.clearRect(0, 0, width, height);
-                    ctx.putImageData(transparent_data, 0, 0);*/
-//////
-                    //console.log(src);
+                    //todo: remove background
+                    document.dispatchEvent(new CustomEvent("loaded_control", {detail: 
+                            {img_name: data_image}
+                    }));
                 })
 
                 // set control
@@ -88,7 +80,58 @@ export default class Controls {
                 document.getElementById(container_id).append(set_resource);
             })
         })
-        this.complexControl();
+    }
+
+    multiLayerControl() {
+        let self = this;
+        document.addEventListener("loaded_control", function(e) {
+            let base_canvas_id = self.findBaseCanvas(e.detail.img_name);
+            if (!base_canvas_id)
+                return;
+    
+            let helper_palette = new Palette();
+            let width = Const.TRGT_WIDTH / 4;
+            let height = Const.TRGT_HEIGHT / 4;
+
+            let base_canvas = document.querySelector("[data-image='" + base_canvas_id + "']");
+            let decor_canvas = document.querySelector("[data-image='" + e.detail.img_name + "']");
+    
+            let transparent_data = helper_palette.getNoBgImage(decor_canvas.getContext("2d"), width, height);
+
+            decor_canvas.getContext("2d").putImageData(transparent_data, 0, 0);
+            base_canvas.getContext("2d").drawImage(decor_canvas, 0,0);
+    
+            decor_canvas.style.display = "none";
+    
+        })
+    }
+
+    findBaseCanvas(full_name) {
+        let idx = this.linked.decor.indexOf(full_name);
+        if(idx > -1) {
+            return this.linked.base[idx];
+        }
+        return false;
+    }
+
+    listOfLinked() {
+        let list_of_base = [];
+        let list_of_decor = [];
+
+        Resources.layers.forEach((resource_folder) => {
+            resource_folder.resources.forEach((resource) => {
+                Decorated.forEach((linked_folders) => {
+                    if (resource !== "0.png") {
+                        if (linked_folders.indexOf(resource_folder.name) > 0) {
+                            list_of_decor.push(resource_folder.name + '/' + resource);                            
+                            list_of_base.push(linked_folders[0] + '/' + resource);
+                        }
+                    }
+                })
+            })
+        })
+
+        return {base: list_of_base, decor: list_of_decor};
     }
 
     hasLinked(name) {
@@ -98,44 +141,6 @@ export default class Controls {
         })
         return has;
     }
-
-
-    complexControl() {
-        let helper_palette = new Palette();
-        let flag = 0;
-        let width = Const.TRGT_WIDTH / 4;
-        let height = Const.TRGT_HEIGHT / 4;
-        let original_ctx = false;
-        this.ctxs.forEach((item_a) => {
-                //console.log(item_a);
-                flag = 0;
-                original_ctx = item_a;
-                this.ctxs.forEach((item_b) => {
-                        if (item_a.ctx.name == item_b.ctx.name && item_a.ctx.name !== '0.png') {
-                            flag++;
-                            if (flag > 1) {
-                                console.log(item_a.ctx.name)
-
-                                window.setTimeout(function() { 
-                                //let original_data = item_a.getImageData(0, 0, width, height);
-                                let transparent_data = helper_palette.getNoBgImage(item_b.ctx, width, height);
-                                
-                                item_b.ctx.putImageData(transparent_data, 0, 0);
-                                item_a.ctx.drawImage(item_b.canvas, 0,0)
-                                }, Const.DELAY);
-
-                            }
-                            
-                        }
-                    
-                })
-        })
-    //let transparent_data = helper_palette.getNoBgImage(ctx, width, height);
-    //
-    //ctx.clearRect(0, 0, width, height);
-    //ctx.putImageData(transparent_data, 0, 0);
-    }
-
 
     colorChange(resource_name, palette_id) {
         this.scene.recolor(resource_name, { palette_id: palette_id })
