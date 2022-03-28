@@ -13,11 +13,19 @@ export default class SceneManager {
         //build all available sprites
         this.canvas = canvas;
         this.ctx = canvas.getContext("2d");
-        self = this;
+        let self = this;
+
+        //each of the first sprites
         self.sprites = [];
+
         Resources.layers.forEach((resource_folder, i) => {
             self.sprites.push(new Sprite(resource_folder.base_folder + resource_folder.resources[0], i));
         })
+
+        document.addEventListener("loaded_sprite", function(e) {
+            e.detail.sprite.render_to_save(self.canvas);
+        })
+
         self.sprites.sort((a, b) => a.order > b.order ? 1 : -1);
 
         //init controls
@@ -27,16 +35,9 @@ export default class SceneManager {
             self.controls = new Controls(self);
         })
 
-    }
+        canvas.width = Const.TRGT_WIDTH;
+        canvas.height = Const.TRGT_HEIGHT
 
-    normalize() {
-        this.sprites[0].normalize(this.canvas);
-    }
-
-    render() {
-        this.sprites.forEach(sprite => {
-            sprite.render_to_save(this.canvas);
-        })
     }
 
     recolor(sprite_name, param) {
@@ -92,7 +93,6 @@ export default class SceneManager {
         all_linked.forEach((arr) => {
             let folders = sprite_new.split('/');
             //if link exists
-        console.log(arr, folders);
             if (arr.indexOf(folders[1]) != -1) {
                 //each element
                 arr.forEach((str) => {

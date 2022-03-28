@@ -63,11 +63,6 @@ export default class Palette {
                 continue;
             }
 
-            //bg white
-            /*            if (currentColor.r + currentColor.g + currentColor.b == 255 * 3) {
-                            continue;
-                        }*/
-            //console.log(this.oldPalette.length);
             var newColorIndex = this.oldPalette.findIndex(item => Recolor.sameColor(currentColor, item));
             Recolor.setColor(this.newPalette[newColorIndex], this.imageData, i);
         }
@@ -78,17 +73,12 @@ export default class Palette {
         let oldPalette = [];
         for (let i = 0; i < this.imageData.data.length / 4; i++) {
             let currentColor = this.getColor(i);
+            
             //bg transparent
             if (currentColor.a == 0) {
                 continue;
             }
-            //bg white
-            /*            if (currentColor.r + currentColor.g + currentColor.b == 255 * 3) {
-                            continue;
-                        }*/
-            /*            if (Recolor.rgbToHex(currentColor) == '#2b8585') {
-                            continue;
-                        }*/
+
             if (this.notInPalette(oldPalette, currentColor) && !!this.notBg(i)) {
                 oldPalette.push(currentColor);
             }

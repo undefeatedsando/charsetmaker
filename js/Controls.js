@@ -2,6 +2,7 @@ import Resources from '../config/resources_json.js'
 import * as Const from './constants.js';
 import Palette from './Palette.js';
 import Decorated from '../config/decorated_elements.js';
+import Names from '../config/names.js';
 
 export default class Controls {
     constructor(scene) {
@@ -17,8 +18,11 @@ export default class Controls {
         self = this;
         this.scene.palette.forEach((set, i) => {
             let set_link = document.createElement('div');
+
+            //set color displayed in square
             set_link.style.backgroundColor = set[4];
             set_link.classList.add('color_control');
+            
             //color change
             set_link.addEventListener("click", function() {
                 self.changeActiveClass('.color_control', this);
@@ -44,7 +48,19 @@ export default class Controls {
             let container_id = 'preview_container_' + i;
             container.id = container_id;
 
+            let container_header = document.createElement('h2');
+            container_header.classList.add('container_name');
+
+            let name = controls.findContainerName(resource_folder.name);
+
             document.getElementById('previews').append(container);
+
+            if(name){
+                container_header.innerHTML = name;
+                document.getElementById(container_id).append(container_header);
+            } else {
+                container.classList.add('hidden_control');
+            }
 
             //create canvas
             resource_folder.resources.forEach((resource) => {
@@ -104,6 +120,16 @@ export default class Controls {
             decor_canvas.style.display = "none";
     
         })
+    }
+
+    findContainerName(base_name) {
+        let name = false;
+        Names.forEach((name_item) => {
+            if(name_item.folder == base_name) {
+                name = name_item.name;
+            }
+        })
+        return name;
     }
 
     findBaseCanvas(full_name) {

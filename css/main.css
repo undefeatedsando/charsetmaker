@@ -1,5 +1,12 @@
 body {
-    background-color: navy;
+    font-family: sans-serif;
+    background: #ece2da;
+    color: #455f81;
+}
+
+h2{
+    font-size: 15px;
+    margin: 5px;
 }
 
 canvas {
@@ -24,12 +31,6 @@ canvas {
 #controls .preview_container canvas {
     display: inline-block;
 }
-/*#controls .preview_container canvas:nth-child(1),
-#controls .preview_container canvas:nth-child(2),
-#controls .preview_container canvas:nth-child(3),
-#controls .preview_container canvas:nth-child(4) {
-    display: inline-block;
-}*/
 
 #controls .preview_container{
     xdisplay: none;
@@ -61,6 +62,15 @@ canvas {
 .color_control.active, .preview_container canvas.active{
     border: 1px solid white;
 }
+
+.hidden_control {
+    display: none;
+}
+
+#previews {
+    display: flex;
+    flex-wrap: wrap;
+}
 .preview_container{
-    xwidth: 200px;
+    width: 20%;
 }

@@ -24,6 +24,9 @@ export default class Sprite {
         let current_self = this;
         this.img.addEventListener("load", function() {
             current_self.drawScaled(current_self);
+            document.dispatchEvent(new CustomEvent("loaded_sprite", {detail: 
+                    {sprite: current_self}
+            }));
         })
         document.getElementById('canvases').append(this.layer);
     }
@@ -42,7 +45,6 @@ export default class Sprite {
 
         //wait till load
         this.img.addEventListener("load", function() {
-            //console.log(src);
             //draw stuff on layer
             self.drawScaled(self);
             self.palette.setBase(self.ctx, self.img.naturalWidth * Const.SCALE, self.img.naturalHeight * Const.SCALE);
@@ -61,22 +63,16 @@ export default class Sprite {
     clear() {
         this.ctx.clearRect(0, 0, Const.TRGT_WIDTH, Const.TRGT_HEIGHT);
     }
-
+/*
     normalize(canvas) {
         let self = this;
         window.setTimeout(function() {
             canvas.width = self.layer.width;
             canvas.height = self.layer.height
         }, Const.DELAY);
-    }
+    }*/
 
     render_to_save(canvas) {
-        let self = this;
-        window.setTimeout(function() { self._render_to_save(canvas) }, Const.DELAY);
-    }
-
-    _render_to_save(canvas) {
-        //console.log(this.src);
         let local_ctx = canvas.getContext("2d");
         local_ctx.drawImage(this.layer, 0, 0);
     }
@@ -89,18 +85,14 @@ export default class Sprite {
 
         ////
         window.setTimeout(function() {
-            //console.log(current_self.layer_id);
             current_self.ctx = current_self.layer.getContext("2d");
             current_self.palette.setBase(current_self.ctx, current_self.layer.width, current_self.layer.height);
-
         }, Const.DELAY);
 
 
         let newImage = current_self.palette.getNoBgImage(current_self.ctx, Const.TRGT_WIDTH * Const.SCALE, Const.TRGT_HEIGHT * Const.SCALE);
         current_self.ctx.putImageData(newImage, 0, 0);
         ////
-
-        //current_self.ctx.drawImage(current_self.img, 0, 0, current_self.img.naturalWidth * Const.SCALE, current_self.img.naturalHeight * Const.SCALE);
     }
 
 }
