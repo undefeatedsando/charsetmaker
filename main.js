@@ -1,6 +1,6 @@
-import * as Recolor from '/js/Recolor.js';
-import Sprite from '/js/Sprite.js';
-import SceneManager from '/js/SceneManager.js';
+import * as Recolor from './js/Recolor.js';
+import Sprite from './js/Sprite.js';
+import SceneManager from './js/SceneManager.js';
 
 var c = document.getElementById("kokoko");
 
