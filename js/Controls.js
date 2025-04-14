@@ -11,7 +11,48 @@ export default class Controls {
         this.ctxs = [];
         this.initColorControls();
         this.initResourceControls();
+        this.initMakerControls();
+        this.initDownloadControls();
         this.linked = this.listOfLinked();
+    }
+
+    initDownloadControls() {
+        var btn = document.getElementById("download");
+        var name = document.getElementById("spriteName");
+
+        btn.addEventListener("click", function() {
+            window.c.toBlob(function(blob) {
+                const link = document.createElement('a');
+                link.download = name.value +'.png';
+                link.href = URL.createObjectURL(blob);
+                link.click();
+                URL.revokeObjectURL(link.href);
+            }, 'image/png');
+        });
+    }
+
+    initMakerControls() {
+        var xp = document.getElementById("xp");
+        var vx = document.getElementById("vx");
+
+        xp.addEventListener("click", function() {
+            document.dispatchEvent(new CustomEvent("change_size", {detail: 
+                {size: Const.TRGT_WIDTH}
+            }));
+            if (this.scene) {
+                this.scene.setSpriteSheetType('xp');
+            }            
+        })
+        
+        vx.addEventListener("click", function() {
+            document.dispatchEvent(new CustomEvent("change_size", {detail: 
+                {size: Const.TRGT_WIDTH / 4 * 3}
+            }));
+            if (this.scene) {
+                this.scene.setSpriteSheetType('vx');
+            }
+        })
+        
     }
 
     initColorControls() {

@@ -12,6 +12,7 @@ export default class SceneManager {
 
         //build all available sprites
         this.canvas = canvas;
+
         this.ctx = canvas.getContext("2d");
         let self = this;
 
@@ -33,6 +34,15 @@ export default class SceneManager {
         document.addEventListener("palette", function() {
             self.palette = Recolor.paletteFromSource();
             self.controls = new Controls(self);
+        })
+
+        document.addEventListener("change_size", function(e) {
+            canvas.width = e.detail.size;
+            
+            // Re-render all sprite layers
+            self.sprites.forEach(sprite => {
+                sprite.render_to_save(canvas);
+            });
         })
 
         canvas.width = Const.TRGT_WIDTH;

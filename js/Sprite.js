@@ -21,6 +21,9 @@ export default class Sprite {
         this.img.src = src;
         this.palette = new Palette();
 
+        this.spriteSheetType = 'xp'; // default to XP
+        this.updateSpriteSheetDimensions();
+
         let current_self = this;
         this.img.addEventListener("load", function() {
             current_self.drawScaled(current_self);
@@ -29,6 +32,23 @@ export default class Sprite {
             }));
         })
         document.getElementById('canvases').append(this.layer);
+    }
+
+    
+    setSpriteSheetType(type) {
+        this.spriteSheetType = type;
+        this.updateSpriteSheetDimensions();
+        this.drawScaled(this);
+    }
+
+    
+    updateSpriteSheetDimensions() {
+        const sheetType = Const.SPRITE_SHEET_TYPES[this.spriteSheetType.toUpperCase()];
+        this.frameWidth = sheetType.frameWidth;
+        this.frameHeight = sheetType.frameHeight;
+        this.columns = sheetType.columns;
+        this.rows = sheetType.rows;
+        this.offsetX = sheetType.offsetX;
     }
 
     // change image on layer
@@ -63,14 +83,6 @@ export default class Sprite {
     clear() {
         this.ctx.clearRect(0, 0, Const.TRGT_WIDTH, Const.TRGT_HEIGHT);
     }
-/*
-    normalize(canvas) {
-        let self = this;
-        window.setTimeout(function() {
-            canvas.width = self.layer.width;
-            canvas.height = self.layer.height
-        }, Const.DELAY);
-    }*/
 
     render_to_save(canvas) {
         let local_ctx = canvas.getContext("2d");
@@ -81,8 +93,14 @@ export default class Sprite {
         current_self.layer.height = current_self.img.naturalHeight * Const.SCALE;
         current_self.layer.width = current_self.img.naturalWidth * Const.SCALE;
         current_self.ctx.imageSmoothingEnabled = false;
-        current_self.ctx.drawImage(current_self.img, 0, 0, current_self.img.naturalWidth * Const.SCALE, current_self.img.naturalHeight * Const.SCALE);
-
+                // Apply offset for VX sprites
+                const offsetX = current_self.offsetX * Const.SCALE;
+                current_self.ctx.drawImage(
+                    current_self.img, 
+                    offsetX, 0, 
+                    current_self.img.naturalWidth * Const.SCALE - offsetX, 
+                    current_self.img.naturalHeight * Const.SCALE
+                );
         ////
         window.setTimeout(function() {
             current_self.ctx = current_self.layer.getContext("2d");
