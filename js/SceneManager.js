@@ -2,6 +2,7 @@ import * as Recolor from './Recolor.js';
 import * as Const from './constants.js';
 import Controls from './Controls.js';
 import Sprite from './Sprite.js';
+import Random from './Random.js';
 import Resources from '../config/resources_json.js'
 import Linked from '../config/linked_folders.js'
 import Decorated from '../config/decorated_elements.js'
@@ -36,18 +37,23 @@ export default class SceneManager {
             self.controls = new Controls(self);
         })
 
-        document.addEventListener("change_size", function(e) {
-            canvas.width = e.detail.size;
-            
-            // Re-render all sprite layers
-            self.sprites.forEach(sprite => {
-                sprite.render_to_save(canvas);
-            });
-        })
-
         canvas.width = Const.TRGT_WIDTH;
         canvas.height = Const.TRGT_HEIGHT
 
+    }
+
+    randomize() {
+        const random = new Random();
+        random.randomize(this);
+    }
+
+    setSceneSpriteSheetType(type) {
+        this.sprites.forEach(sprite => sprite.setSpriteSheetType(type));
+        const typeConfig = Const.SPRITE_SHEET_TYPES[type.toUpperCase()];
+        this.canvas.width = typeConfig.columns * typeConfig.frameWidth;
+            
+        // Re-render all sprite layers
+        this.sprites.forEach(sprite => sprite.render_to_save(this.canvas));
     }
 
     recolor(sprite_name, param) {

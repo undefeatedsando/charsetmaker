@@ -98,12 +98,12 @@ export default class Sprite {
                 current_self.ctx.drawImage(
                     current_self.img, 
                     offsetX, 0, 
-                    current_self.img.naturalWidth * Const.SCALE - offsetX, 
-                    current_self.img.naturalHeight * Const.SCALE
+                    current_self.img.naturalWidth * Const.SCALE, current_self.img.naturalHeight * Const.SCALE,
+                    0, 0,
+                    current_self.img.naturalWidth * Const.SCALE, current_self.img.naturalHeight * Const.SCALE
                 );
         ////
         window.setTimeout(function() {
-            current_self.ctx = current_self.layer.getContext("2d");
             current_self.palette.setBase(current_self.ctx, current_self.layer.width, current_self.layer.height);
         }, Const.DELAY);
 

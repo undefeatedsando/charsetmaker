@@ -36,12 +36,12 @@ export default class Palette {
 
     getNewImage() {
 
-        //build palettes
-        this.getOldPalette();
-        this.getNewPalette();        
-        if (!this.params) {
+        //build palettes  
+        if (!this.params || this.params.palette_id == null) {
             return this.imageData;
         }
+        this.getOldPalette();
+        this.getNewPalette();      
 
         //replace colors
         for (var i = 0; i < this.imageData.data.length / 4; i++) {

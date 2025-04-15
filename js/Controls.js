@@ -13,7 +13,24 @@ export default class Controls {
         this.initResourceControls();
         this.initMakerControls();
         this.initDownloadControls();
+        this.initRandomControls();
         this.linked = this.listOfLinked();
+    }
+
+    initRandomControls() {
+        var random = document.getElementById("random");
+        random.addEventListener("click", () => this.scene.randomize());
+        document.addEventListener("active_resource_changed", function(e) {
+            console.log(e)
+            let elements = document.querySelectorAll('[data-source="'+e.detail.src+'"]');
+            for (var j = 0; j < elements.length; j++) {
+                elements[j].classList.remove('active');
+            }
+            console.log('[data-source="'+e.detail.src+'"][data-image="'+e.detail.img+'"]')
+            //also class
+            document.querySelector('[data-source="'+e.detail.src+'"][data-image="'+e.detail.img+'"]').classList.add('active');
+            
+        })
     }
 
     initDownloadControls() {
@@ -34,23 +51,23 @@ export default class Controls {
     initMakerControls() {
         var xp = document.getElementById("xp");
         var vx = document.getElementById("vx");
+        self = this;
 
         xp.addEventListener("click", function() {
             document.dispatchEvent(new CustomEvent("change_size", {detail: 
                 {size: Const.TRGT_WIDTH}
             }));
-            if (this.scene) {
-                this.scene.setSpriteSheetType('xp');
-            }            
+                
+            self.scene.setSceneSpriteSheetType('xp');
+                     
         })
         
         vx.addEventListener("click", function() {
             document.dispatchEvent(new CustomEvent("change_size", {detail: 
                 {size: Const.TRGT_WIDTH / 4 * 3}
             }));
-            if (this.scene) {
-                this.scene.setSpriteSheetType('vx');
-            }
+            
+            self.scene.setSceneSpriteSheetType('vx');
         })
         
     }
@@ -71,6 +88,13 @@ export default class Controls {
             })
             document.getElementById('color').append(set_link);
         });
+        
+        //default
+        let defaultColors = document.createElement('div');
+        defaultColors.classList.add('crossed-square');
+        defaultColors.classList.add('color_control');
+        defaultColors.addEventListener("click", () => this.scene.recolor(self.active_resource, { palette_id: null }))
+        document.getElementById('color').append(defaultColors);
     }
 
     initResourceControls() {
@@ -153,7 +177,7 @@ export default class Controls {
             let base_canvas = document.querySelector("[data-image='" + base_canvas_id + "']");
             let decor_canvas = document.querySelector("[data-image='" + e.detail.img_name + "']");
     
-            let transparent_data = helper_palette.getNoBgImage(decor_canvas.getContext("2d"), width, height);
+            let transparent_data = helper_palette.getNoBgImage(decor_canvas.getContext("2d"), width, height, 0);
 
             decor_canvas.getContext("2d").putImageData(transparent_data, 0, 0);
             base_canvas.getContext("2d").drawImage(decor_canvas, 0,0);
